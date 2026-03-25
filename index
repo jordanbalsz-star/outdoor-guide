@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Campfire Code — Outdoor Essentials</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bark: #2C1A0E;
+    --ember: #C94B1A;
+    --ash: #F2EAD8;
+    --pine: #3A5A40;
+    --pine-light: #5C8A64;
+    --gold: #D4A017;
+    --smoke: #8B7D72;
+    --night: #0F1A0D;
+    --cream: #FAF6EE;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--cream);
+    color: var(--bark);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: var(--night);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 2rem;
+  }
+
+  /* animated stars */
+  .stars {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 40%, rgba(255,255,255,.5) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 45% 10%, rgba(255,255,255,.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 55%, rgba(255,255,255,.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 25%, rgba(255,255,255,.7) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 88% 70%, rgba(255,255,255,.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 33% 80%, rgba(255,255,255,.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 55% 85%, rgba(255,255,255,.4) 0%, transparent 100%),
+      radial-gradient(2px 2px at 20% 65%, rgba(255,255,200,.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 92% 20%, rgba(255,255,255,.7) 0%, transparent 100%);
+  }
+
+  /* tree silhouettes */
+  .trees {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 45%;
+    background:
+      /* left cluster */
+      linear-gradient(to top, var(--night) 0%, transparent 100%) 0 0 / 100% 100% no-repeat;
+    clip-path: polygon(
+      0% 100%, 0% 70%, 3% 55%, 6% 70%, 7% 45%, 10% 65%, 12% 30%,
+      15% 55%, 17% 20%, 20% 50%, 22% 35%, 25% 60%, 27% 25%,
+      30% 55%, 32% 40%, 35% 65%, 37% 30%, 40% 58%, 42% 42%,
+      45% 65%, 47% 35%, 50% 55%, 52% 38%, 55% 65%, 57% 28%,
+      60% 58%, 62% 42%, 65% 68%, 67% 35%, 70% 60%, 72% 45%,
+      75% 65%, 78% 40%, 80% 62%, 83% 30%, 86% 55%, 88% 42%,
+      91% 65%, 93% 48%, 96% 60%, 98% 50%, 100% 65%, 100% 100%
+    );
+    background-color: var(--night);
+    filter: brightness(0.3);
+    z-index: 1;
+  }
+
+  /* campfire glow */
+  .glow {
+    position: absolute;
+    bottom: 35%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 200px;
+    background: radial-gradient(ellipse at center bottom, rgba(201,75,26,.55) 0%, rgba(212,160,23,.2) 40%, transparent 70%);
+    animation: flicker 3s ease-in-out infinite alternate;
+    z-index: 2;
+  }
+
+  @keyframes flicker {
+    0%   { opacity: .7; transform: translateX(-50%) scaleX(1); }
+    33%  { opacity: 1;  transform: translateX(-50%) scaleX(1.05); }
+    66%  { opacity: .8; transform: translateX(-50%) scaleX(.95); }
+    100% { opacity: .9; transform: translateX(-50%) scaleX(1.02); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+  }
+
+  .badge {
+    display: inline-block;
+    border: 1px solid rgba(212,160,23,.5);
+    color: var(--gold);
+    font-size: .7rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    padding: .4rem 1.2rem;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp .8s .3s forwards;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 900;
+    color: var(--ash);
+    line-height: 1;
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeUp .9s .5s forwards;
+  }
+
+  .hero h1 em {
+    display: block;
+    font-style: italic;
+    color: var(--ember);
+  }
+
+  .hero p {
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    color: var(--smoke);
+    font-size: 1.05rem;
+    line-height: 1.75;
+    opacity: 0;
+    animation: fadeUp .9s .7s forwards;
+  }
+
+  .hero-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp .9s .9s forwards;
+  }
+
+  .hero-nav a {
+    text-decoration: none;
+    border: 1px solid rgba(242,234,216,.25);
+    color: var(--ash);
+    padding: .6rem 1.4rem;
+    font-size: .8rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    transition: background .25s, border-color .25s;
+    border-radius: 2px;
+  }
+  .hero-nav a:hover { background: rgba(242,234,216,.1); border-color: var(--ash); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 5rem 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: .7rem;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: .75rem;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--ember), transparent);
+    max-width: 120px;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    color: var(--bark);
+  }
+
+  .intro-text {
+    font-size: 1.05rem;
+    color: var(--smoke);
+    line-height: 1.85;
+    margin-bottom: 2.5rem;
+    max-width: 660px;
+  }
+
+  /* ── STEPS ── */
+  .steps {
+    counter-reset: steps;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1rem;
+    align-items: start;
+    background: white;
+    border: 1px solid rgba(44,26,14,.08);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem 1.25rem 1rem;
+    position: relative;
+    transition: box-shadow .2s, transform .2s;
+  }
+  .step:hover { box-shadow: 0 6px 24px rgba(44,26,14,.1); transform: translateY(-2px); }
+
+  .step-num {
+    counter-increment: steps;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--ember);
+    line-height: 1;
+    padding-top: .1rem;
+  }
+
+  .step h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: .3rem;
+    color: var(--bark);
+  }
+
+  .step p {
+    font-size: .9rem;
+    line-height: 1.7;
+    color: var(--smoke);
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    text-align: center;
+    position: relative;
+    padding: 1rem 0;
+    color: var(--ember);
+    font-size: 1.4rem;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(44,26,14,.15));
+  }
+  .divider::before { left: 0; background: linear-gradient(to left, transparent, rgba(44,26,14,.15)); }
+  .divider::after  { right: 0; }
+
+  /* ── DARK SECTION ── */
+  .dark-section {
+    background: var(--pine);
+    color: var(--ash);
+    padding: 5rem 1.5rem;
+  }
+  .dark-section .inner { max-width: 900px; margin: 0 auto; }
+  .dark-section .section-label { color: var(--gold); }
+  .dark-section .section-label::after { background: linear-gradient(to right, var(--gold), transparent); }
+  .dark-section h2 { color: var(--ash); }
+  .dark-section .intro-text { color: rgba(242,234,216,.75); }
+
+  /* safety cards grid */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+
+  .card {
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 4px;
+    padding: 1.5rem;
+    transition: background .2s;
+  }
+  .card:hover { background: rgba(255,255,255,.12); }
+
+  .card-icon {
+    font-size: 1.8rem;
+    margin-bottom: .75rem;
+  }
+
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: .5rem;
+    color: var(--ash);
+  }
+
+  .card p {
+    font-size: .875rem;
+    line-height: 1.7;
+    color: rgba(242,234,216,.7);
+  }
+
+  /* ── NEIGHBOR / ETIQUETTE ── */
+  .etiquette-list {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    margin-top: 2rem;
+  }
+
+  .etiq-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: white;
+    border-left: 3px solid var(--pine-light);
+    border-radius: 0 4px 4px 0;
+    transition: border-color .2s;
+  }
+  .etiq-item:hover { border-color: var(--ember); }
+
+  .etiq-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: .1rem; }
+
+  .etiq-item h3 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: .95rem;
+    margin-bottom: .2rem;
+    color: var(--bark);
+  }
+  .etiq-item p { font-size: .875rem; line-height: 1.65; color: var(--smoke); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bark);
+    color: var(--smoke);
+    text-align: center;
+    padding: 3rem 1.5rem;
+    font-size: .8rem;
+    letter-spacing: .05em;
+  }
+  footer strong { color: var(--ash); }
+
+  /* ── SECTION ALTERNATING BG ── */
+  .alt-bg { background: var(--ash); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="stars"></div>
+  <div class="trees"></div>
+  <div class="glow"></div>
+  <div class="hero-content">
+    <div class="badge">Common Outdoor Knowledge</div>
+    <h1>The<em>Campfire Code</em></h1>
+    <p>Everything you need to know before you head into the wild — from building your first fire to being a good neighbor under the stars.</p>
+    <nav class="hero-nav">
+      <a href="#fire">🔥 Building Fires</a>
+      <a href="#tent">⛺ Setting Up Camp</a>
+      <a href="#safety">🛡️ Camp Safety</a>
+      <a href="#neighbor">🤝 Respect Neighbors</a>
+    </nav>
+  </div>
+</div>
+
+<!-- FIRE -->
+<section id="fire">
+  <div class="section-label">Chapter One</div>
+  <h2>Building a Safe Campfire</h2>
+  <p class="intro-text">A campfire is the heart of any camp experience — warmth, cooking, and community all in one. But fire demands respect. Follow these steps every single time.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <h3>Choose or use a designated fire ring</h3>
+        <p>Always use an existing fire pit or ring if one is available. If not, clear a 10-foot circle of all debris — leaves, sticks, and dry grass — and ring it with rocks to contain the fire.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <h3>Gather the right materials</h3>
+        <p>You need three things: <strong>tinder</strong> (dry leaves, pine needles, paper), <strong>kindling</strong> (small dry sticks, pencil-width), and <strong>fuel wood</strong> (larger logs). Never use wet, green, or chemically-treated wood.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <h3>Build your structure</h3>
+        <p>Place a handful of tinder in the center. Lean kindling over it in a teepee shape. Add a few fuel logs leaned against the outside. Leave gaps — fire needs air to breathe.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div>
+        <h3>Light from the bottom</h3>
+        <p>Light the tinder at the base on the windward side. Blow gently at the base if needed. Add more tinder if the fire struggles — never use accelerants like lighter fluid or gasoline.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div>
+        <h3>Extinguish completely — every time</h3>
+        <p>Pour water on the fire. Stir the ashes with a stick. Pour more water. The ashes should be cool to the touch. If you can't hold your hand over them comfortably, they're not out. <em>Drown it, stir it, feel it.</em></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div>
+        <h3>Never leave a fire unattended</h3>
+        <p>Not even for "just a minute." Wind can carry an ember 50 feet in seconds. Assign someone to watch the fire at all times or fully extinguish it before leaving.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider">⛺</div>
+
+<!-- TENT -->
+<section id="tent" class="alt-bg">
+  <div class="section-label">Chapter Two</div>
+  <h2>Setting Up Your Tent</h2>
+  <p class="intro-text">A well-pitched tent means a dry, safe, comfortable night's sleep. Take 15 minutes to do it right and you'll thank yourself at 2am when the wind picks up.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <h3>Pick your site carefully</h3>
+        <p>Look for flat, elevated ground — never pitch in a depression or dry riverbed where water collects. Clear away rocks and sticks. Face the door away from prevailing wind. Stay at least 200 feet from water sources.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <h3>Read the instructions first</h3>
+        <p>Every tent is different. Lay all parts out and match them to the manual before you start. Doing this at home before your first trip saves huge headaches in the dark or rain.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <h3>Stake the footprint or ground cloth</h3>
+        <p>If your tent has a footprint, lay it down first. This protects the tent floor from abrasion and moisture. Position it slightly smaller than the tent so rain doesn't collect beneath it.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div>
+        <h3>Assemble and thread the poles</h3>
+        <p>Assemble poles by connecting the shock-corded sections. Thread or clip them through the tent body sleeves — work from the center out. Don't force bent poles; tent poles snap under side pressure.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div>
+        <h3>Stake it down — all corners</h3>
+        <p>Drive stakes at 45° angles, pointing away from the tent. Stake all corners before the rainfly goes on. Taut is better than loose — a sagging tent pools water and flaps noisily all night.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div>
+        <h3>Add the rainfly and guylines</h3>
+        <p>Attach and tension the rainfly even if skies look clear — weather changes fast. Run guylines out to stakes if wind is expected. Leave the fly vents cracked to reduce condensation inside the tent.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider">🛡️</div>
+
+<!-- SAFETY -->
+<div class="dark-section" id="safety">
+  <div class="inner">
+    <div class="section-label">Chapter Three</div>
+    <h2>Camp Safety Essentials</h2>
+    <p class="intro-text">Being prepared doesn't mean expecting disaster — it means enjoying the outdoors with confidence. These basics keep everyone safe.</p>
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">🩹</div>
+        <h3>First Aid Kit</h3>
+        <p>Bring a kit with bandages, antiseptic wipes, blister treatment, pain relievers, antihistamine, and any personal prescriptions. Know how to use what's in it.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">💧</div>
+        <h3>Safe Water</h3>
+        <p>Never drink directly from streams or lakes without purifying first. Use a filter, purification tablets, or boil water for at least one minute. Dehydration is a serious risk.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🐻</div>
+        <h3>Wildlife Awareness</h3>
+        <p>Store all food and scented items in a bear canister or hung at least 10 feet up, 4 feet from any trunk. Never feed wildlife — it harms them and puts you at risk.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🗺️</div>
+        <h3>Know Your Route</h3>
+        <p>Tell someone your plan — where you're going, when you'll be back. Bring a map and compass as backup. GPS fails; paper doesn't lose battery.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌩️</div>
+        <h3>Weather Awareness</h3>
+        <p>Check forecasts before you leave. If a storm rolls in on the trail, move to low ground, avoid tall trees and ridgelines, and never shelter in a cave during lightning.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">👁️</div>
+        <h3>Keep Children Close</h3>
+        <p>Establish clear boundaries with kids. Assign a buddy system. Teach them what to do if lost: STOP, stay put, blow a whistle, make noise to help rescuers find you.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌡️</div>
+        <h3>Temperature Extremes</h3>
+        <p>Layer clothing for cold; loose, light fabric for heat. Recognize signs of hypothermia (shivering, confusion) and heat stroke (no sweating, hot skin). Act fast with both.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📵</div>
+        <h3>Emergency Plan</h3>
+        <p>Know the nearest trailhead, ranger station, and emergency number (911 where available). A personal locator beacon (PLB) can be a lifesaver in remote areas.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEIGHBOR -->
+<section id="neighbor">
+  <div class="section-label">Chapter Four</div>
+  <h2>Respect Your Camp Neighbors</h2>
+  <p class="intro-text">Great camping experiences are shared ones. Whether you're in a crowded campground or a remote wilderness site, how you treat others shapes everyone's time outdoors.</p>
+  <div class="etiquette-list">
+    <div class="etiq-item">
+      <div class="etiq-icon">🔇</div>
+      <div>
+        <h3>Quiet Hours Are Real Hours</h3>
+        <p>Most campgrounds enforce quiet hours from 10pm to 6am. Respect them — and use your own judgment about volume even outside those hours. Sound travels far in open air.</p>
+      </div>
+    </div>
+    <div class="etiq-item">
+      <div class="etiq-icon">💡</div>
+      <div>
+        <h3>Light Pollution Matters</h3>
+        <p>Lanterns pointed at neighboring sites and bright headlamps kill the atmosphere and disrupt sleep. Point lights down, use red-light mode at night, and keep campfire brightness reasonable late at night.</p>
+      </div>
+    </div>
+    <div class="etiq-item">
+      <div class="etiq-icon">🐶</div>
+      <div>
+        <h3>Control Your Pets</h3>
+        <p>Keep dogs on a leash and don't let them wander into neighboring campsites or approach other campers without clear welcome. Barking dogs at night are a top complaint at every campground.</p>
+      </div>
+    </div>
+    <div class="etiq-item">
+      <div class="etiq-icon">🚮</div>
+      <div>
+        <h3>Pack It In, Pack It Out</h3>
+        <p>Leave no trace — take all your trash with you, including food scraps. Don't dump dishwater near water sources. Leave the site cleaner than you found it, even if others haven't.</p>
+      </div>
+    </div>
+    <div class="etiq-item">
+      <div class="etiq-icon">🌲</div>
+      <div>
+        <h3>Respect the Land</h3>
+        <p>Don't cut live branches, dig trenches around your tent, carve trees, or pick wildflowers. These small acts multiply across thousands of visitors and permanently damage the environment.</p>
+      </div>
+    </div>
+    <div class="etiq-item">
+      <div class="etiq-icon">👋</div>
+      <div>
+        <h3>Be a Good Human</h3>
+        <p>A simple hello goes a long way. If neighbors are struggling to set up camp, offer help. If you're leaving early, let them know so an early alarm doesn't catch them off guard.</p>
+      </div>
+    </div>
+    <div class="etiq-item">
+      <div class="etiq-icon">🔥</div>
+      <div>
+        <h3>Smoke Direction Awareness</h3>
+        <p>Campfire smoke blowing into a neighboring site is inconsiderate and can cause real distress for people with asthma or allergies. Be mindful of wind direction when choosing fire placement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>The Campfire Code</strong> &mdash; A guide to common outdoor knowledge<br><br>
+  🔥 Build responsibly &nbsp;·&nbsp; ⛺ Camp wisely &nbsp;·&nbsp; 🛡️ Stay safe &nbsp;·&nbsp; 🤝 Be a good neighbor<br><br>
+  <span style="opacity:.5">Leave every place better than you found it.</span>
+</footer>
+
+</body>
+</html>
